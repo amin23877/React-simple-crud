@@ -1,56 +1,19 @@
-import { useEffect, useState } from "react";
-
-import { Container, Typography, Button, Box, LinearProgress } from "@mui/material";
+import { Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-
-import { ItemTable } from "./features/Table";
-import { getItems } from "./api";
-import ItemModal from "./features/Modal";
+import ClassCrud from "./pages/Class";
+import Login from "./pages/Login";
+import Dashboard from "./pages/Dashboard";
+import Student from "./pages/Student";
 
 function App() {
-    const [rows, setRows] = useState();
-    const [refresh, setRefresh] = useState(0);
-    const [addItem, setAddItem] = useState(false);
-    const [editItem, setEditItem] = useState(false);
-    const [selectedItem, setSelectedItem] = useState();
-
-    useEffect(() => {
-        getItems().then((res) => {
-            setRows(res);
-        });
-    }, [refresh]);
-
-    return (
-        <Container>
-            <ItemModal open={addItem} onClose={() => setAddItem(false)} setRows={setRows} setRefresh={setRefresh} />
-            {selectedItem && (
-                <ItemModal
-                    open={editItem}
-                    onClose={() => setEditItem(false)}
-                    data={selectedItem}
-                    setRefresh={setRefresh}
-                />
-            )}
-            <Typography variant="h3">Crud Sample</Typography>
-            <Box mb={1}>
-                <Button variant="contained" onClick={() => setAddItem(true)}>
-                    {" "}
-                    Add Item
-                </Button>
-            </Box>
-            {rows ? (
-                <ItemTable
-                    rows={rows}
-                    onRowSelected={(data) => {
-                        setSelectedItem(data);
-                        setEditItem(true);
-                    }}
-                />
-            ) : (
-                <LinearProgress />
-            )}
-        </Container>
-    );
+  return (
+    <Routes>
+      <Route path="/" element={<Dashboard />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/masters" element={<ClassCrud />} />
+      <Route path="/student" element={<Student />} />
+    </Routes>
+  );
 }
 
 export default App;
