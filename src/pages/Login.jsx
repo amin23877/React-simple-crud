@@ -4,24 +4,28 @@ import TextField from "../components/TextField";
 import { useState } from "react";
 import { login, signUp } from "../api";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function Login() {
   const navigate = useNavigate();
 
   const [signIn, setSignIn] = useState(false);
 
-  const handleSubmit = async (data) => {
+  const handleSubmit = async (data, resetForm) => {
     try {
       if (signIn) {
         await signUp(data);
+        setSignIn(false);
+        resetForm();
       } else {
         const resp = await login(data);
         localStorage.setItem("token", resp.access_token);
         localStorage.setItem("username", data.username);
+        navigate("/masters");
       }
-      navigate("/masters");
     } catch (error) {
       console.log(error);
+      toast.error(error.response.detail);
     } finally {
     }
   };
@@ -40,7 +44,7 @@ function Login() {
           username: "",
           password: "",
         }}
-        onSubmit={handleSubmit}
+        onSubmit={(data, { resetForm }) => handleSubmit(data, resetForm)}
       >
         {({ getFieldProps, errors, touched }) => (
           <Form>

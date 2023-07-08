@@ -27,12 +27,17 @@ export const UserTable = ({ rows, onRowSelected }) => {
                 ? "green"
                 : value === "absent"
                 ? "red"
-                : "#5dbb63",
+                : "orange",
           }}
         >
           {value}
         </div>
       ),
+    },
+    {
+      id: "reason",
+      label: "Reason",
+      minWidth: 190,
     },
   ];
 

@@ -1,4 +1,5 @@
 import axios from "axios";
+import { toast } from "react-toastify";
 import * as Yup from "yup";
 
 export const schema = Yup.object().shape({
@@ -33,7 +34,10 @@ export const deleteItem = (id) => {
 export const signUp = (data) => {
   const resp = axios
     .post("http://192.168.10.41:7777/signup", { ...data, is_active: true })
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.data?.detail);
+    });
   return resp;
 };
 export const login = (data) => {
@@ -42,7 +46,10 @@ export const login = (data) => {
   params.append("password", data.password);
   const resp = axios
     .post("http://192.168.10.41:7777/login", params)
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.data?.detail);
+    });
   return resp;
 };
 
@@ -58,7 +65,10 @@ export const getClasses = () => {
         },
       }
     )
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.detail);
+    });
   return resp;
 };
 
@@ -74,7 +84,10 @@ export const getClassStudents = (classId) => {
         },
       }
     )
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.data?.detail);
+    });
   return resp;
 };
 export const addClassByCsv = (data) => {
@@ -91,6 +104,9 @@ export const addClassByCsv = (data) => {
         },
       }
     )
-    .then((res) => res.data);
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.data?.detail);
+    });
   return resp;
 };
