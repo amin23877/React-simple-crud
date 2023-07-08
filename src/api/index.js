@@ -110,3 +110,20 @@ export const addClassByCsv = (data) => {
     });
   return resp;
 };
+export const updateStudentStatus = (data) => {
+  const resp = axios
+    .put(
+      `http://192.168.10.41:7777/students/${data.master}/${data.class_name}?attendance=${data.attendance}`,
+      data,
+      {
+        headers: {
+          Authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => res.data)
+    .catch((e) => {
+      toast.error(e?.response?.data?.detail);
+    });
+  return resp;
+};

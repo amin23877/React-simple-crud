@@ -9,11 +9,12 @@ import {
 import { Form, Formik } from "formik";
 import TextField from "../components/TextField";
 import Toast from "../components/Toast";
+import { updateStudentStatus } from "../api";
 
 function Student() {
   const handleSubmit = async (data) => {
     try {
-      //   await postItem(data);
+      await updateStudentStatus(data);
       Toast("Item created", "success");
     } catch (error) {
       console.log(error);
