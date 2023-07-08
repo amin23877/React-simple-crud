@@ -9,38 +9,39 @@ import {
 } from "@mui/material";
 import "react-toastify/dist/ReactToastify.css";
 
-import { ItemTable } from "../features/Table";
+import { ClassTable } from "../features/ClassTable";
 import { getClasses } from "../api";
+import ClassModal from "../features/Modal";
 
 function ClassCrud() {
   const [classes, setClasses] = useState();
   const [addItem, setAddItem] = useState(false);
-  const [selectedClasses, setSelectedClasses] = useState();
+  const [refresh, setRefresh] = useState(1);
 
   useEffect(() => {
     getClasses().then((res) => {
       setClasses(res);
     });
-  }, []);
+  }, [refresh]);
 
   return (
     <Container>
+      {addItem && (
+        <ClassModal
+          onClose={() => {
+            setAddItem(false);
+          }}
+          open={addItem}
+          setRefresh={setRefresh}
+        />
+      )}
       <Typography variant="h3">Classes List</Typography>
       <Box mb={1}>
         <Button variant="contained" onClick={() => setAddItem(true)}>
           Add Class By CSV
         </Button>
       </Box>
-      {classes ? (
-        <ItemTable
-          rows={classes}
-          onRowSelected={(data) => {
-            setSelectedClasses(data);
-          }}
-        />
-      ) : (
-        <LinearProgress />
-      )}
+      {classes ? <ClassTable rows={classes} /> : <LinearProgress />}
     </Container>
   );
 }

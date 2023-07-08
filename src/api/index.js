@@ -2,9 +2,8 @@ import axios from "axios";
 import * as Yup from "yup";
 
 export const schema = Yup.object().shape({
-  title: Yup.string().required().max(40),
-  category: Yup.string().max(25),
-  price: Yup.number().required().min(1).max(10000),
+  master: Yup.string().required().max(40),
+  class_name: Yup.string().max(25),
 });
 
 export const getItems = () => {
@@ -49,11 +48,49 @@ export const login = (data) => {
 
 export const getClasses = () => {
   const resp = axios
-    .get("http://192.168.10.41:7777/classrooms", {
-      headers: {
-        Authorization: `bearer ${localStorage.getItem("token")}`,
-      },
-    })
+    .get(
+      `http://192.168.10.41:7777/classrooms/${localStorage.getItem(
+        "username"
+      )}`,
+      {
+        headers: {
+          Authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => res.data);
+  return resp;
+};
+
+export const getClassStudents = (classId) => {
+  const resp = axios
+    .get(
+      `http://192.168.10.41:7777/classroom/${classId.split("_")[1]}/${
+        classId.split("_")[2]
+      }`,
+      {
+        headers: {
+          Authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
+    .then((res) => res.data);
+  return resp;
+};
+export const addClassByCsv = (data) => {
+  const formData = new FormData();
+  formData.append("csv_file", data.csv_file);
+  const resp = axios
+    .post(
+      `http://192.168.10.41:7777/classroom/${data.master}/${data.class_name}/upload_csv`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `bearer ${localStorage.getItem("token")}`,
+        },
+      }
+    )
     .then((res) => res.data);
   return resp;
 };
